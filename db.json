@@ -1,0 +1,24 @@
+{
+    "books": [
+        {
+            "_id": 23,
+            "name": "The Lord of The Rings",
+            "author": "Tolkien",
+            "collection": [2]
+        },
+        {
+            "_id": 24,
+            "name": "The Lord of The Rings 2",
+            "author": "Tolkien",
+            "collection": [2]
+        }
+    ],
+    "booasdaks": [],
+    "collections": [
+        {
+            "_id": 2,
+            "name": "Sciense fiction",
+            "books": [23, 24]
+        }
+    ]
+}
