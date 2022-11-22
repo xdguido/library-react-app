@@ -4,7 +4,7 @@ import authService from './authService';
 const persist = JSON.parse(localStorage.getItem('persist'));
 
 const initialState = {
-    user: null,
+    user: { name: 'The Lizard Wizard', email: 'asda@asdasd.com' },
     persist,
     isError: false,
     isSuccess: false,
@@ -13,7 +13,7 @@ const initialState = {
 };
 
 // register user
-export const registerUser = createAsyncThunk('auth/register', async (user, thunkAPI) => {
+export const registerUser = createAsyncThunk('auth/registerReduc', async (user, thunkAPI) => {
     try {
         return await authService.register(user);
     } catch (err) {
@@ -23,7 +23,7 @@ export const registerUser = createAsyncThunk('auth/register', async (user, thunk
 });
 
 // login user
-export const loginUser = createAsyncThunk('auth/login', async (user, thunkAPI) => {
+export const loginUser = createAsyncThunk('auth/loginReduc', async (user, thunkAPI) => {
     try {
         return await authService.login(user);
     } catch (err) {
@@ -33,7 +33,7 @@ export const loginUser = createAsyncThunk('auth/login', async (user, thunkAPI) =
 });
 
 // reset password
-export const resetPassword = createAsyncThunk('auth/resetPassword', async (user, thunkAPI) => {
+export const resetPassword = createAsyncThunk('auth/resetPasswordReduc', async (user, thunkAPI) => {
     try {
         return await authService.resetPassword(user);
     } catch (err) {
@@ -43,7 +43,7 @@ export const resetPassword = createAsyncThunk('auth/resetPassword', async (user,
 });
 
 // google login
-export const loginGoogle = createAsyncThunk('auth/loginGoogle', async (code, thunkAPI) => {
+export const loginGoogle = createAsyncThunk('auth/loginGoogleReduc', async (code, thunkAPI) => {
     try {
         return await authService.loginGoogle(code);
     } catch (err) {
@@ -53,7 +53,7 @@ export const loginGoogle = createAsyncThunk('auth/loginGoogle', async (code, thu
 });
 
 // facebook login
-export const loginFacebook = createAsyncThunk('auth/loginFacebook', async (code, thunkAPI) => {
+export const loginFacebook = createAsyncThunk('auth/loginFacebookReduc', async (code, thunkAPI) => {
     try {
         return await authService.loginFacebook(code);
     } catch (err) {
@@ -63,7 +63,7 @@ export const loginFacebook = createAsyncThunk('auth/loginFacebook', async (code,
 });
 
 // github login
-export const loginGithub = createAsyncThunk('auth/loginGithub', async (code, thunkAPI) => {
+export const loginGithub = createAsyncThunk('auth/loginGithubReduc', async (code, thunkAPI) => {
     try {
         return await authService.loginGithub(code);
     } catch (err) {
@@ -94,7 +94,7 @@ export const authSlice = createSlice({
         builder
             .addMatcher(
                 (action) => {
-                    return action.type.endsWith('/pending');
+                    return action.type.endsWith('Reduc/pending');
                 },
                 (state) => {
                     state.isLoading = true;
@@ -102,7 +102,7 @@ export const authSlice = createSlice({
             )
             .addMatcher(
                 (action) => {
-                    return action.type.endsWith('/fulfilled');
+                    return action.type.endsWith('Reduc/fulfilled');
                 },
                 (state, action) => {
                     state.isLoading = false;
@@ -112,7 +112,7 @@ export const authSlice = createSlice({
             )
             .addMatcher(
                 (action) => {
-                    return action.type.endsWith('/rejected');
+                    return action.type.endsWith('Reduc/rejected');
                 },
                 (state, action) => {
                     state.isLoading = false;
