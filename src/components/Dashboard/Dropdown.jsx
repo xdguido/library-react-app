@@ -22,7 +22,9 @@ function Dropdown() {
     useEffect(() => {
         const currentPath = location.pathname;
         const selectedLink = navBar.find((link) => link.href === currentPath);
-        setSelectedLink(selectedLink.name);
+        if (selectedLink) {
+            setSelectedLink(selectedLink.name);
+        }
     }, [location]);
 
     return (

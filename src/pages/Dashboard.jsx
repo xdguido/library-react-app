@@ -29,7 +29,7 @@ function Dashboard() {
                     <nav className="hidden md:block w-60 mr-3">
                         <ul className="list-none">
                             {navBar.map((item) => (
-                                <li key={item.name}>
+                                <li key={item.id}>
                                     <NavLink
                                         to={item.href}
                                         className={({ isActive }) =>
@@ -54,10 +54,7 @@ function Dashboard() {
                             ))}
                         </ul>
                     </nav>
-                    <div
-                        id="user-dashboard"
-                        className="flex flex-col flex-1 bg-white rounded-md shadow px-5 py-8"
-                    >
+                    <div id="user-dashboard" className="flex-1">
                         <Outlet />
                     </div>
                 </div>

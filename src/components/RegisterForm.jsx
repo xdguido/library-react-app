@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
+import { toast } from 'react-hot-toast';
 import { registerUser, reset } from '../features/auth/authSlice';
 import { validateEmail, validatePassword, validateName } from '../validators/userValidator';
 import FormInput from './FormInput';

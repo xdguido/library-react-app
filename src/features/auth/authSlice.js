@@ -4,7 +4,13 @@ import authService from './authService';
 const persist = JSON.parse(localStorage.getItem('persist'));
 
 const initialState = {
-    user: { name: 'The Lizard Wizard', email: 'asda@asdasd.com' },
+    user: {
+        name: 'The Lizard Wizard',
+        email: 'asda@asdasd.com',
+        username: 'xdguido',
+        accessToken: 'asd'
+    },
+    // user: null,
     persist,
     isError: false,
     isSuccess: false,

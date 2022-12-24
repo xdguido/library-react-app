@@ -1,24 +1,144 @@
 {
-    "books": [
-        {
-            "_id": 23,
-            "name": "The Lord of The Rings",
-            "author": "Tolkien",
-            "collection": [2]
-        },
-        {
-            "_id": 24,
-            "name": "The Lord of The Rings 2",
-            "author": "Tolkien",
-            "collection": [2]
-        }
-    ],
-    "booasdaks": [],
-    "collections": [
-        {
-            "_id": 2,
-            "name": "Sciense fiction",
-            "books": [23, 24]
-        }
-    ]
+  "books": [
+    {
+      "id": 23,
+      "title": "The Lord of The Rings",
+      "author": "Tolkien",
+      "review": "Best book ever omg",
+      "user": "xdguido",
+      "collection": [
+        2
+      ]
+    },
+    {
+      "id": 24,
+      "title": "The Lord of The Rings 2",
+      "author": "Tolkien",
+      "review": "Best book ever omg",
+      "user": "xdguido",
+      "collection": [
+        2
+      ]
+    },
+    {
+      "id": 25,
+      "title": "The Lord of The Rings 2",
+      "author": "Tolkien",
+      "review": "Best book ever omg",
+      "user": "xdguido",
+      "collection": [
+        2
+      ]
+    },
+    {
+      "id": 26,
+      "title": "The Lord of The Rings 2 The Lord of The Rings The Lord of The Rings",
+      "author": "Tolkien",
+      "review": "Best book ever omg Best book ever omg Best book ever omg Best book ever omg Best book ever omg Best book ever omg",
+      "user": "xdguido",
+      "collection": [
+        2
+      ]
+    },
+    {
+      "id": 27,
+      "title": "The Lord of The Rings 2",
+      "author": "Tolkien",
+      "review": "Best book ever omg",
+      "user": "xdguido",
+      "collection": [
+        2
+      ]
+    },
+    {
+      "id": 28,
+      "title": "The Lord of The Rings 2",
+      "author": "Tolkien",
+      "review": "Best book ever omg",
+      "user": "xdguido",
+      "collection": [
+        2
+      ]
+    },
+    {
+      "title": "jjj",
+      "author": "j",
+      "collection": "Sciense fiction",
+      "review": "",
+      "id": 29
+    },
+    {
+      "title": "dale man",
+      "author": "asd",
+      "collection": "2",
+      "review": "",
+      "id": 30
+    },
+    {
+      "title": "esa man",
+      "author": "asd",
+      "collection": "Sciense fiction",
+      "review": "",
+      "id": 31
+    },
+    {
+      "title": "whatsapp man",
+      "author": "asd",
+      "genre": "Historical fiction",
+      "collection": "Sciense fiction",
+      "review": "",
+      "id": 32
+    },
+    {
+      "title": "ASDADS",
+      "author": "d",
+      "genre": "",
+      "collection": "",
+      "review": "",
+      "id": 33
+    },
+    {
+      "title": "JSjsjs",
+      "author": "ok right now",
+      "genre": "Fantasy",
+      "collection": "Sciense fiction",
+      "review": "",
+      "id": 34
+    },
+    {
+      "title": "OK d",
+      "author": "de",
+      "genre": "",
+      "collection": "",
+      "review": "",
+      "id": 35
+    },
+    {
+      "title": "move",
+      "author": "ass",
+      "genre": "",
+      "collection": "",
+      "review": "",
+      "id": 36
+    },
+    {
+      "title": "okokoko",
+      "author": "okokok",
+      "genre": "",
+      "collection": "",
+      "review": "",
+      "id": 37
+    }
+  ],
+  "asdasd": [],
+  "collections": [
+    {
+      "_id": 2,
+      "name": "Sciense fiction",
+      "books": [
+        23,
+        24
+      ]
+    }
+  ]
 }
