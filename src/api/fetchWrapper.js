@@ -1,60 +1,39 @@
-import { interceptor } from './fetchInterceptor';
+import { store } from '../app/store';
+import { refreshToken } from './refreshToken';
 
-export const fetchWrapper = {
-    get,
-    post,
-    put,
-    delete: _delete
-};
-
-async function get(url) {
-    const requestOptions = {
-        method: 'GET'
-    };
-    const response = await fetch(url, requestOptions);
-    return handleResponse(response);
-}
-
-async function post(url, body) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    };
-    const response = await fetch(url, requestOptions);
-    return handleResponse(response);
-}
-
-async function put(url, body) {
-    const requestOptions = {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(body)
-    };
-    const response = await fetch(url, requestOptions);
-    return handleResponse(response);
-}
-
-// prefixed with underscored because delete is a reserved word in javascript
-async function _delete(url) {
-    const requestOptions = {
-        method: 'DELETE'
-    };
-    const response = await fetch(url, requestOptions);
-    return handleResponse(response);
-}
-
-// helper functions
-
-function handleResponse(response) {
-    return response.text().then((text) => {
-        const data = text && JSON.parse(text);
-
-        if (!response.ok) {
-            const error = (data && data.message) || response.statusText;
-            return Promise.reject(error);
+export const fetchWrapper = async (endpoint, { body, ...customConfig } = {}) => {
+    const token = store.getState().auth.user.accessToken;
+    const headers = { 'content-type': 'application/json' };
+    if (token) {
+        headers.Authorization = `Bearer ${token}`;
+    }
+    const config = {
+        // method: body ? 'POST' : 'GET',
+        ...customConfig,
+        headers: {
+            ...headers,
+            ...customConfig.headers
         }
+    };
+    if (body) {
+        config.body = JSON.stringify(body);
+    }
 
-        return data;
-    });
-}
+    return window
+        .fetch(`${process.env.REACT_APP_API_URL}/${endpoint}`, config)
+        .then(async (response) => {
+            if (response.status === 403) {
+                // get new accessToken
+                await refreshToken();
+                return;
+            }
+            if (response.ok) {
+                return { data: response.json() };
+            } else {
+                const errorMessage = await response.text();
+                Promise.reject(errorMessage);
+                return { error: errorMessage };
+                // return Promise.reject(new Error({ error: errorMessage }));
+            }
+        });
+};

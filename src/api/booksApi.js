@@ -1,13 +1,11 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 import toast from 'react-hot-toast';
-// import useAxiosPrivate from '../hooks/useAxiosPrivate';
 import { fetchWrapper } from './fetchWrapper';
 
 export const booksApi = createApi({
     reducerPath: 'booksApi',
     // baseQuery: fetchWrapper({}),
     // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
-    // baseQuery: useAxiosPrivate(),
     tagTypes: ['Books', 'Collections'],
     endpoints: (builder) => ({
         getBooks: builder.query({
