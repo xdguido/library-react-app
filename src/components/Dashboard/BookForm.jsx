@@ -1,7 +1,6 @@
 import { useForm } from 'react-hook-form';
 import { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAddBookMutation } from '../../api/booksApi';
 import CollectionCombobox from './CollectionCombobox';
 import GenreCombobox from './GenreCombobox';
@@ -15,7 +14,8 @@ function BookForm() {
         mode: 'onSubmit',
         defaultValues: {
             title: '',
-            author: ''
+            author: '',
+            slug: `test-slug-${Math.round(Math.random() * 10000)}`
         }
     });
     const navigate = useNavigate();
@@ -23,9 +23,13 @@ function BookForm() {
 
     const [createBook, { isLoading }] = useAddBookMutation();
     const [multiple, setMultiple] = useState(false);
+    const [selectedCollection, setSelectedCollection] = useState('');
+    const [selectedGenre, setSelectedGenre] = useState('');
 
     const onSubmit = (data) => {
-        createBook(data);
+        createBook({
+            data: { ...data, genre: selectedGenre, bookCollection: selectedCollection._id }
+        });
         if (!multiple) {
             navigate('/');
         }
@@ -82,9 +86,10 @@ function BookForm() {
                     )}
                 </div>
 
-                <GenreCombobox {...register('genre')} />
-
-                <CollectionCombobox {...register('collection')} />
+                <GenreCombobox
+                    selectedGenre={selectedGenre}
+                    setSelectedGenre={(genre) => setSelectedGenre(genre)}
+                />
 
                 <div className={classNames(errors.review ? 'mb-1' : 'mb-3', 'flex flex-col')}>
                     <label className="mb-1" htmlFor="review">
@@ -105,6 +110,12 @@ function BookForm() {
                         <span className="text-red-600 text-sm">{errors.review.message}</span>
                     )}
                 </div>
+
+                <CollectionCombobox
+                    selectedCollection={selectedCollection}
+                    setSelectedCollection={(collection) => setSelectedCollection(collection)}
+                />
+
                 <label className="mb-3 text-sm" htmlFor="multiple">
                     <input
                         className="mr-2"

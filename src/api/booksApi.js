@@ -1,11 +1,10 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import toast from 'react-hot-toast';
-import { fetchWrapper } from './fetchWrapper';
+import { baseQueryWithReauth } from './baseQueryWithReauth';
 
 export const booksApi = createApi({
     reducerPath: 'booksApi',
-    // baseQuery: fetchWrapper({}),
-    // baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000' }),
+    baseQuery: baseQueryWithReauth,
     tagTypes: ['Books', 'Collections'],
     endpoints: (builder) => ({
         getBooks: builder.query({
@@ -17,10 +16,13 @@ export const booksApi = createApi({
             providesTags: [{ type: 'Books', id: 'Item' }]
         }),
         getCollections: builder.query({
-            query: () => '/collections'
+            query: (userName) => `api/collections/${userName}`,
+            providesTags: [{ type: 'Collections', id: 'List' }]
         }),
         getCollectionById: builder.query({
-            query: (id) => `collections/${id}`
+            query: ({ userName, collectionSlug }) =>
+                `api/collections/${userName}/${collectionSlug}`,
+            providesTags: [{ type: 'Books', id: 'Item' }]
         }),
         getBooksDashboard: builder.query({
             query: (userName) => `api/books/${userName}`,
@@ -40,15 +42,19 @@ export const booksApi = createApi({
         // }),
         addBook: builder.mutation({
             query: (newBook) => ({
-                url: 'api/books/newBook',
+                url: 'api/books/addBook',
                 method: 'post',
                 body: newBook
             }),
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+            async onQueryStarted(newBook, { dispatch, queryFulfilled }) {
                 const addResult = dispatch(
-                    booksApi.util.updateQueryData('getBooksDashboard', undefined, (draft) => {
-                        draft.push(args);
-                    })
+                    booksApi.util.updateQueryData(
+                        'getBooksDashboard',
+                        newBook.data.user,
+                        (draft) => {
+                            draft.push(newBook.data);
+                        }
+                    )
                 );
                 try {
                     const success = await queryFulfilled;
@@ -70,7 +76,6 @@ export const booksApi = createApi({
             query: (data) => ({
                 url: 'api/books/addLike',
                 method: 'post',
-                // headers: { Authorization: `Bearer ${accessToken}` },
                 body: data
             }),
             async onQueryStarted(args, { dispatch, queryFulfilled }) {
@@ -131,11 +136,11 @@ export const {
     useGetBooksQuery,
     useGetBooksDashboardQuery,
     useGetBookByIdQuery,
-    // useGetBookByIdDashboardQuery,
     useGetCollectionsQuery,
     useGetCollectionByIdQuery,
-    // useGetCollectionsDashboardQuery,
-    // useGetCollectionByIdDashboardQuery,
     useAddBookMutation,
     useAddLikeMutation
+    // useGetBookByIdDashboardQuery,
+    // useGetCollectionsDashboardQuery,
+    // useGetCollectionByIdDashboardQuery,
 } = booksApi;

@@ -8,7 +8,7 @@ const initialState = {
         name: 'The Lizard Wizard',
         email: 'asda@asdasd.com',
         username: 'xdguido',
-        accessToken: 'asd'
+        accessToken: 'xdguido'
     },
     // user: null,
     persist,

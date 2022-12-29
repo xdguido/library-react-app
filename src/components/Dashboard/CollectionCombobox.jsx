@@ -1,27 +1,20 @@
+/* eslint-disable react/prop-types */
 import React, { useState, Fragment } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
+import { useSelector } from 'react-redux';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
 import { useGetCollectionsQuery } from '../../api/booksApi';
 
-// const collections = [
-//     { _id: 1, name: 'Asd1' },
-//     { _id: 2, name: 'Asd2' },
-//     { _id: 3, name: 'Asd3' },
-//     { _id: 4, name: 'Asd4' },
-//     { _id: 5, name: 'Asd5' }
-// ];
-
-const CollectionCombobox = React.forwardRef(function CollectionCombobox(props, ref) {
-    const { ...inputProps } = props;
-    const [selectedCollection, setSelectedCollection] = useState('');
+const CollectionCombobox = ({ setSelectedCollection, selectedCollection }) => {
     const [query, setQuery] = useState('');
-    const { data: collections } = useGetCollectionsQuery();
+    const { user } = useSelector((state) => state.auth);
+    const { data: collections } = useGetCollectionsQuery(user.username);
 
     const filteredCollections = collections
         ? query === ''
             ? collections
             : collections?.filter((collection) => {
-                  return collection.name
+                  return collection.title
                       .toLowerCase()
                       .replace(/\s+/g, '')
                       .includes(query.toLowerCase().replace(/\s+/g, ''));
@@ -37,12 +30,19 @@ const CollectionCombobox = React.forwardRef(function CollectionCombobox(props, r
                     </label>
                     <Combobox.Input
                         className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-                        displayValue={(collection) => collection.name}
-                        onChange={(event) => setQuery(event.target.value)}
+                        displayValue={(collection) => collection.title}
+                        onKeyDown={(e) => {
+                            if (
+                                e.key === 'Escape' ||
+                                (e.key === 'Backspace' && query.length === 1) ||
+                                (e.key === 'Backspace' && query === '')
+                            ) {
+                                setSelectedCollection('');
+                            }
+                        }}
+                        onChange={(e) => setQuery(e.target.value)}
                         placeholder="Add to a Collection"
                         id="collection"
-                        ref={ref}
-                        {...inputProps}
                     />
                     <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -53,7 +53,9 @@ const CollectionCombobox = React.forwardRef(function CollectionCombobox(props, r
                     leave="transition ease-in duration-100"
                     leaveFrom="opacity-100"
                     leaveTo="opacity-0"
-                    afterLeave={() => setQuery('')}
+                    afterLeave={() => {
+                        setQuery('');
+                    }}
                 >
                     <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
                         {filteredCollections?.length === 0 && query !== '' ? (
@@ -84,7 +86,7 @@ const CollectionCombobox = React.forwardRef(function CollectionCombobox(props, r
                                                             : 'font-normal'
                                                     }`}
                                                 >
-                                                    {collection.name}
+                                                    {collection.title}
                                                 </span>
                                                 {selectedCollection ? (
                                                     <span
@@ -109,6 +111,6 @@ const CollectionCombobox = React.forwardRef(function CollectionCombobox(props, r
             </div>
         </Combobox>
     );
-});
+};
 
 export default CollectionCombobox;

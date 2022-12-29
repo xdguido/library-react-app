@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState, Fragment } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
@@ -36,21 +37,18 @@ const genres = [
     'Newspaper'
 ];
 
-const GenreCombobox = React.forwardRef(function GenreCombobox(props, ref) {
-    const { ...inputProps } = props;
-    const [selectedGenre, setSelectedGenre] = useState('');
+const GenreCombobox = ({ selectedGenre, setSelectedGenre }) => {
     const [query, setQuery] = useState('');
 
-    const filteredGenres = genres
-        ? query === ''
+    const filteredGenres =
+        query === ''
             ? genres
             : genres?.filter((genre) => {
                   return genre
                       .toLowerCase()
                       .replace(/\s+/g, '')
                       .includes(query.toLowerCase().replace(/\s+/g, ''));
-              })
-        : [];
+              });
 
     return (
         <Combobox value={selectedGenre} onChange={setSelectedGenre}>
@@ -62,11 +60,18 @@ const GenreCombobox = React.forwardRef(function GenreCombobox(props, ref) {
                     <Combobox.Input
                         className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
                         displayValue={(genre) => genre}
+                        onKeyDown={(e) => {
+                            if (
+                                e.key === 'Escape' ||
+                                (e.key === 'Backspace' && query.length === 1) ||
+                                (e.key === 'Backspace' && query === '')
+                            ) {
+                                setSelectedGenre('');
+                            }
+                        }}
                         onChange={(event) => setQuery(event.target.value)}
                         placeholder="Select a Genre"
                         id="genre"
-                        ref={ref}
-                        {...inputProps}
                     />
                     <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
                         <ChevronUpDownIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
@@ -130,6 +135,6 @@ const GenreCombobox = React.forwardRef(function GenreCombobox(props, ref) {
             </div>
         </Combobox>
     );
-});
+};
 
 export default GenreCombobox;
