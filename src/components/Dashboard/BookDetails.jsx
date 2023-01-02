@@ -1,5 +1,9 @@
 import { formatDistance } from 'date-fns';
-import { useGetBookByIdQuery, useAddLikeMutation } from '../../api/booksApi';
+import {
+    useGetBookByIdQuery,
+    useToggleLikeMutation,
+    useToggleSaveMutation
+} from '../../api/booksApi';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
@@ -12,25 +16,32 @@ function BookDetails() {
     const { userName, bookSlug } = useParams();
     const { user } = useSelector((state) => state.auth);
     const { data: book, isLoading, isError } = useGetBookByIdQuery({ userName, bookSlug });
-    const [createLike] = useAddLikeMutation();
+    const [createLike] = useToggleLikeMutation();
+    const [createSave] = useToggleSaveMutation();
 
-    let bookData;
-    if (book) {
-        bookData = { doc: book._id, docModel: 'Book' };
+    let bookData = null;
+    let likeState = null;
+    let saveState = null;
+    if (user && book) {
+        bookData = { data: { user: user.username, doc: book._id, docModel: 'Book' } };
+        likeState = book.likes.some((like) => like.user === user.username);
+        saveState = book.saves.some((save) => save.user === user.username);
+        // console.log(book);
+        // console.log(likeState);
     }
 
     const handleLike = (data) => {
         if (!user) {
             return alert('Sign in to like a book');
         }
-        createLike(data);
+        createLike({ ...data });
     };
-    // const handleSave = (data) => {
-    //     if (!user) {
-    //         return alert('Sign in to save a book');
-    //     }
-    //     createSave(data);
-    // };
+    const handleSave = (data) => {
+        if (!user) {
+            return alert('Sign in to save a book');
+        }
+        createSave({ ...data });
+    };
 
     if (isLoading) {
         return <span>Loading...</span>;
@@ -42,7 +53,8 @@ function BookDetails() {
         <div className="flex justify-center p-4">
             <div className="hidden md:flex flex-col bg-white rounded p-2 mr-1">
                 <button
-                    onClick={() => handleLike(bookData)}
+                    title="Like"
+                    onClick={() => handleLike({ bookData, likeState })}
                     className="rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 p-1"
                 >
                     <HeartIcon className="h-7 w-7" />
@@ -52,6 +64,7 @@ function BookDetails() {
                 </span>
                 <button
                     title="Save to bookmark"
+                    onClick={() => handleSave({ bookData, saveState })}
                     className="rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 p-1"
                 >
                     <BookmarkSquareIcon className="h-7 w-7" />

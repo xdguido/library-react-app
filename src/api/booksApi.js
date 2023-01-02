@@ -8,24 +8,23 @@ export const booksApi = createApi({
     tagTypes: ['Books', 'Collections'],
     endpoints: (builder) => ({
         getBooks: builder.query({
-            query: (userName) => `api/books/${userName}`,
+            query: (userName) => `/books/${userName}`,
             providesTags: [{ type: 'Books', id: 'List' }]
         }),
         getBookById: builder.query({
-            query: ({ userName, bookSlug }) => `api/books/${userName}/${bookSlug}`,
+            query: ({ userName, bookSlug }) => `/books/${userName}/${bookSlug}`,
             providesTags: [{ type: 'Books', id: 'Item' }]
         }),
         getCollections: builder.query({
-            query: (userName) => `api/collections/${userName}`,
+            query: (userName) => `/collections/${userName}`,
             providesTags: [{ type: 'Collections', id: 'List' }]
         }),
         getCollectionById: builder.query({
-            query: ({ userName, collectionSlug }) =>
-                `api/collections/${userName}/${collectionSlug}`,
+            query: ({ userName, collectionSlug }) => `/collections/${userName}/${collectionSlug}`,
             providesTags: [{ type: 'Books', id: 'Item' }]
         }),
         getBooksDashboard: builder.query({
-            query: (userName) => `api/books/${userName}`,
+            query: (userName) => `/books/${userName}`,
             providesTags: [{ type: 'Books', id: 'List' }]
         }),
         // getBookByIdDashboard: builder.query({
@@ -42,7 +41,7 @@ export const booksApi = createApi({
         // }),
         addBook: builder.mutation({
             query: (newBook) => ({
-                url: 'api/books/addBook',
+                url: '/books/addBook',
                 method: 'post',
                 body: newBook
             }),
@@ -72,34 +71,51 @@ export const booksApi = createApi({
                 }
             }
         }),
-        addLike: builder.mutation({
-            query: (data) => ({
-                url: 'api/books/addLike',
+        toggleLike: builder.mutation({
+            query: ({ bookData, likeState }) => ({
+                url: `/books/toggleLike/${likeState}`,
                 method: 'post',
-                body: data
+                body: bookData
             }),
             async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                const addResult = dispatch(
-                    booksApi.util.updateQueryData('getBookById', undefined, (draft) => {
-                        draft.push(args);
-                    })
-                );
                 try {
                     const success = await queryFulfilled;
-                    if (success) {
+                    if (success && !args.likeState) {
                         toast.success('Saved.', {
                             position: 'bottom-center'
                         });
                     }
+                    dispatch(booksApi.util.invalidateTags([{ type: 'Books', id: 'Item' }]));
                 } catch (err) {
-                    toast.error('Error while saving.', {
+                    toast.error('Error.', {
                         position: 'bottom-center'
                     });
-                    addResult.undo();
-                    dispatch(booksApi.util.invalidateTags({ type: 'Books', id: 'Item' }));
                 }
             }
         }),
+        toggleSave: builder.mutation({
+            query: ({ bookData, saveState }) => ({
+                url: `/books/toggleSave/${saveState}`,
+                method: 'post',
+                body: bookData
+            }),
+            async onQueryStarted(args, { dispatch, queryFulfilled }) {
+                try {
+                    const success = await queryFulfilled;
+                    if (success && !args.saveState) {
+                        toast.success('Saved.', {
+                            position: 'bottom-center'
+                        });
+                    }
+                    dispatch(booksApi.util.invalidateTags([{ type: 'Books', id: 'Item' }]));
+                } catch (err) {
+                    toast.error('Error.', {
+                        position: 'bottom-center'
+                    });
+                }
+            }
+        }),
+
         editBook: builder.mutation({
             query: (book) => ({
                 url: '/books',
@@ -139,8 +155,6 @@ export const {
     useGetCollectionsQuery,
     useGetCollectionByIdQuery,
     useAddBookMutation,
-    useAddLikeMutation
-    // useGetBookByIdDashboardQuery,
-    // useGetCollectionsDashboardQuery,
-    // useGetCollectionByIdDashboardQuery,
+    useToggleLikeMutation,
+    useToggleSaveMutation
 } = booksApi;
