@@ -5,6 +5,7 @@ import { Link, NavLink, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout, reset } from '../features/auth/authSlice';
 import Logo from './Logo';
+import profilePicture from '../assets/profile_picture.webp';
 
 const mainNav = [
     { name: 'Dashboard', href: '/' },
@@ -102,7 +103,7 @@ function NavBar() {
                                                     src={
                                                         user.image_url
                                                             ? user.image_url
-                                                            : 'https://www.dropbox.com/s/3mo5jg5bdfvu7ta/337e74ba34080415e432f9e0adc2170e.webp?dl=1'
+                                                            : profilePicture
                                                     }
                                                     referrerPolicy="no-referrer"
                                                     alt={user.name}

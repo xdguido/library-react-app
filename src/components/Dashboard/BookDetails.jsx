@@ -7,10 +7,15 @@ import {
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import {
-    HeartIcon,
-    BookmarkSquareIcon,
+    HeartIcon as HeartOutline,
+    BookmarkSquareIcon as BookmarkOutline,
     DocumentMagnifyingGlassIcon
 } from '@heroicons/react/24/outline';
+import {
+    HeartIcon as HeartSolid,
+    BookmarkSquareIcon as BookmarkSolid
+} from '@heroicons/react/24/solid';
+import profilePicture from '../../assets/profile_picture.webp';
 
 function BookDetails() {
     const { userName, bookSlug } = useParams();
@@ -42,6 +47,9 @@ function BookDetails() {
         }
         createSave({ ...data });
     };
+    const classNames = (...classes) => {
+        return classes.filter(Boolean).join(' ');
+    };
 
     if (isLoading) {
         return <span>Loading...</span>;
@@ -55,9 +63,16 @@ function BookDetails() {
                 <button
                     title="Like"
                     onClick={() => handleLike({ bookData, likeState })}
-                    className="rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 p-1"
+                    className={classNames(
+                        likeState ? 'text-blue-600 ' : 'text-gray-400 ',
+                        'rounded hover:bg-gray-100 hover:text-blue-600 p-1'
+                    )}
                 >
-                    <HeartIcon className="h-7 w-7" />
+                    {likeState ? (
+                        <HeartSolid className="h-7 w-7" />
+                    ) : (
+                        <HeartOutline className="h-7 w-7" />
+                    )}
                 </button>
                 <span title="Likes" className="text-gray-400 text-center mb-1">
                     {book.numLikes.toString()}
@@ -65,9 +80,16 @@ function BookDetails() {
                 <button
                     title="Save to bookmark"
                     onClick={() => handleSave({ bookData, saveState })}
-                    className="rounded text-gray-400 hover:bg-gray-100 hover:text-blue-600 p-1"
+                    className={classNames(
+                        saveState ? 'text-blue-600 ' : 'text-gray-400 ',
+                        'rounded hover:bg-gray-100 hover:text-blue-600 p-1'
+                    )}
                 >
-                    <BookmarkSquareIcon className="h-7 w-7" />
+                    {saveState ? (
+                        <BookmarkSolid className="h-7 w-7" />
+                    ) : (
+                        <BookmarkOutline className="h-7 w-7" />
+                    )}
                 </button>
                 <span className="text-gray-400 text-center mb-1">{book.numSaves.toString()}</span>
                 <button
@@ -95,10 +117,7 @@ function BookDetails() {
                     <div className="shrink-0 rounded-full overflow-hidden text-sm bg-slate-100 text-gray-600 mr-2">
                         <img
                             className="h-8 w-8"
-                            src={
-                                book.user.image_url ||
-                                'https://www.dropbox.com/s/3mo5jg5bdfvu7ta/337e74ba34080415e432f9e0adc2170e.webp?dl=1'
-                            }
+                            src={book.user.image_url || profilePicture}
                             referrerPolicy="no-referrer"
                             alt="profile picture"
                         />
