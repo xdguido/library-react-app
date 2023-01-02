@@ -21,24 +21,8 @@ export const booksApi = createApi({
         }),
         getCollectionById: builder.query({
             query: ({ userName, collectionSlug }) => `/collections/${userName}/${collectionSlug}`,
-            providesTags: [{ type: 'Books', id: 'Item' }]
+            providesTags: [{ type: 'Collections', id: 'Item' }]
         }),
-        getBooksDashboard: builder.query({
-            query: (userName) => `/books/${userName}`,
-            providesTags: [{ type: 'Books', id: 'List' }]
-        }),
-        // getBookByIdDashboard: builder.query({
-        //     query: (userName, bookId) => `books/${userName}/${bookId}`,
-        //     providesTags: [{ type: 'Books', id: 'Item' }]
-        // }),
-        // getCollectionsDashboard: builder.query({
-        //     query: () => '/collections',
-        //     providesTags: [{ type: 'Collections', id: 'List' }]
-        // }),
-        // getCollectionByIdDashboard: builder.query({
-        //     query: (id) => `/collections/${id}`,
-        //     providesTags: [{ type: 'Collections', id: 'Item' }]
-        // }),
         addBook: builder.mutation({
             query: (newBook) => ({
                 url: '/books/addBook',
@@ -150,7 +134,6 @@ export const booksApi = createApi({
 
 export const {
     useGetBooksQuery,
-    useGetBooksDashboardQuery,
     useGetBookByIdQuery,
     useGetCollectionsQuery,
     useGetCollectionByIdQuery,
