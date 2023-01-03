@@ -45,10 +45,11 @@ function BookForm() {
         <div className="flex justify-center p-4">
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className="flex flex-col bg-white rounded w-full  xl:w-[1000px] p-2 sm:p-4 sm:px-12"
+                className="flex flex-col bg-white rounded w-full  xl:w-[800px] p-2 sm:p-4 sm:px-12"
+                id="bookForm"
             >
                 <div className={classNames(errors.title ? 'mb-1' : 'mb-3', 'flex flex-col')}>
-                    <label className="mb-1" htmlFor="title">
+                    <label className="sr-only mb-1" htmlFor="title">
                         Book Title
                     </label>
                     <input
@@ -67,7 +68,7 @@ function BookForm() {
                     )}
                 </div>
                 <div className={classNames(errors.author ? 'mb-1' : 'mb-3', 'flex flex-col')}>
-                    <label className="mb-1" htmlFor="author">
+                    <label className="sr-only mb-1" htmlFor="author">
                         Book Author
                     </label>
                     <input
@@ -75,15 +76,14 @@ function BookForm() {
                             errors.author ? 'border-red-600' : 'border-gray-300',
                             'rounded-sm h-9'
                         )}
-                        {...register('author', { required: 'Please enter a book author' })}
+                        {...register('author')}
                         name="author"
                         id="author"
                         type="text"
                         placeholder="New book author here..."
                     />
-                    {errors.author && (
-                        <span className="text-red-600 text-sm">{errors.author.message}</span>
-                    )}
+
+                    {/* <span className="text-gray-400 text-sm">{'Default: "Unknown author"'}</span> */}
                 </div>
 
                 <GenreCombobox
@@ -92,7 +92,7 @@ function BookForm() {
                 />
 
                 <div className={classNames(errors.review ? 'mb-1' : 'mb-3', 'flex flex-col')}>
-                    <label className="mb-1" htmlFor="review">
+                    <label className="sr-only mb-1" htmlFor="review">
                         Review
                     </label>
                     <textarea
@@ -103,8 +103,8 @@ function BookForm() {
                         {...register('review')}
                         name="review"
                         id="review"
-                        placeholder="Book review here..."
-                        rows="6"
+                        placeholder="Write a book review..."
+                        rows="4"
                     ></textarea>
                     {errors.review && (
                         <span className="text-red-600 text-sm">{errors.review.message}</span>
@@ -133,6 +133,7 @@ function BookForm() {
                     )}
                     disabled={isLoading}
                     type="submit"
+                    form="bookForm"
                 >
                     Submit
                 </button>

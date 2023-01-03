@@ -55,6 +55,34 @@ export const booksApi = createApi({
                 }
             }
         }),
+        addCollection: builder.mutation({
+            query: (newList) => ({
+                url: '/collections/addBook',
+                method: 'post',
+                body: newList
+            }),
+            async onQueryStarted(newList, { dispatch, queryFulfilled }) {
+                const addResult = dispatch(
+                    booksApi.util.updateQueryData('getCollections', newList.data.user, (draft) => {
+                        draft.push(newList.data);
+                    })
+                );
+                try {
+                    const success = await queryFulfilled;
+                    if (success) {
+                        toast.success('Saved.', {
+                            position: 'bottom-center'
+                        });
+                    }
+                } catch (err) {
+                    toast.error('Error while saving.', {
+                        position: 'bottom-center'
+                    });
+                    addResult.undo();
+                    dispatch(booksApi.util.invalidateTags({ type: 'Collections', id: 'List' }));
+                }
+            }
+        }),
         toggleLike: builder.mutation({
             query: ({ bookData, likeState }) => ({
                 url: `/books/toggleLike/${likeState}`,
@@ -138,6 +166,7 @@ export const {
     useGetCollectionsQuery,
     useGetCollectionByIdQuery,
     useAddBookMutation,
+    useAddCollectionMutation,
     useToggleLikeMutation,
     useToggleSaveMutation
 } = booksApi;

@@ -49,8 +49,9 @@ function App() {
                                             element={<CollectionDashboard />}
                                         />
                                     </Route>
-                                    {/* <Route path="settings" element={<Settings />} /> */}
                                     <Route path="books/new" element={<BookForm />} />
+                                    {/* <Route path="collections/new" element={<CollectionForm />} /> */}
+                                    {/* <Route path="settings" element={<Settings />} /> */}
                                 </Route>
                             </Route>
                         </Route>

@@ -23,13 +23,13 @@ const CollectionCombobox = ({ setSelectedCollection, selectedCollection }) => {
 
     return (
         <Combobox value={selectedCollection} onChange={setSelectedCollection}>
-            <div className="relative mt-1">
-                <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+            <div className="relative z-10 mb-3">
+                <div className="relative w-full cursor-default text-left sm:text-sm">
                     <label className="sr-only" htmlFor="collection">
                         Add to a Collection
                     </label>
                     <Combobox.Input
-                        className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                        className="w-full h-9 border-gray-300 rounded-sm py-2 pl-3 pr-10 text-gray-900"
                         displayValue={(collection) => collection.title}
                         onKeyDown={(e) => {
                             if (
@@ -58,15 +58,43 @@ const CollectionCombobox = ({ setSelectedCollection, selectedCollection }) => {
                     }}
                 >
                     <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        {/* <button
+                            onClick={() => {}}
+                            className="relative cursor-default select-none py-2 pl-10 pr-4 text-gray-900"
+                        >
+                            + New Collection
+                        </button>
+                        {showForm && (
+                            <form
+                                id="list-form"
+                                className="flex flex-col mb-4 p-3"
+                                onSubmit={handleSubmit(onSubmit)}
+                            >
+                                <label className="sr-only" htmlFor="title">
+                                    Collection Title
+                                </label>
+                                <FormInput
+                                    {...register('title', { required: 'Please add a valid title' })}
+                                    id="title"
+                                    type="text"
+                                    errors={errors.title}
+                                    placeholder="Collection Title"
+                                    form="list-form"
+                                />
+                                <button
+                                    className="flex items-center justify-center rounded-sm text-sm text-white bg-blue-600 px-5 py-2"
+                                    type="submit"
+                                >
+                                    Create Collection
+                                </button>
+                            </form>
+                        )} */}
                         {filteredCollections?.length === 0 && query !== '' ? (
                             <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                                 Nothing found.
                             </div>
                         ) : (
                             <>
-                                <button className="relative cursor-default select-none py-2 pl-10 pr-4 text-gray-900">
-                                    New Collection +
-                                </button>
                                 {filteredCollections?.map((collection) => (
                                     <Combobox.Option
                                         key={collection._id}

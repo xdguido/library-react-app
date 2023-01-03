@@ -52,13 +52,13 @@ const GenreCombobox = ({ selectedGenre, setSelectedGenre }) => {
 
     return (
         <Combobox value={selectedGenre} onChange={setSelectedGenre}>
-            <div className="relative z-10 mt-1">
-                <div className="relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300 sm:text-sm">
+            <div className="relative z-10 mb-3">
+                <div className="relative w-full cursor-default text-left sm:text-sm">
                     <label className="sr-only" htmlFor="genre">
                         Select book genre
                     </label>
                     <Combobox.Input
-                        className="w-full border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
+                        className="w-full h-9 border-gray-300 rounded-sm py-2 pl-3 pr-10 text-gray-900"
                         displayValue={(genre) => genre}
                         onKeyDown={(e) => {
                             if (
