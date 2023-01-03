@@ -7,9 +7,9 @@ import PageLayout from './components/PageLayout';
 import RequireAuth from './components/RequireAuth';
 import RemindMeLogin from './components/RemindMeLogin';
 import Dashboard from './pages/Dashboard';
-import CollectionDashboard from './components/Dashboard/CollectionDashboard';
+import ListDashboard from './components/Dashboard/ListDashboard';
 import BooksList from './components/Dashboard/BooksList';
-import CollectionList from './components/Dashboard/CollectionList';
+import ListList from './components/Dashboard/ListList';
 import BookDetails from './components/Main/BookDetails';
 import BookForm from './components/Dashboard/BookForm';
 
@@ -32,25 +32,22 @@ function App() {
                             <Route path="oauth/:provider" element={<OAuthHandler />} />
                             <Route path="*" element={<NotFound />} />
                             {/* <Route path=":username/books" element={<PublicBooks />} /> */}
-                            {/* <Route path=":username/collections" element={<PublicCollections />} /> */}
+                            {/* <Route path=":username/lists" element={<PublicLists />} /> */}
                             <Route path=":userName/books/:bookSlug" element={<BookDetails />} />
                             {/* <Route
-                                path=":userName/collections/:collectionSlug"
-                                element={<CollectionDetails />}
+                                path=":userName/lists/:listSlug"
+                                element={<ListDetails />}
                             /> */}
                             {/* private routes  */}
                             <Route element={<RemindMeLogin />}>
                                 <Route element={<RequireAuth />}>
                                     <Route element={<Dashboard />}>
                                         <Route index element={<BooksList />} />
-                                        <Route path="collections" element={<CollectionList />} />
-                                        <Route
-                                            path="collections/:collectionSlug"
-                                            element={<CollectionDashboard />}
-                                        />
+                                        <Route path="lists" element={<ListList />} />
+                                        <Route path="lists/:listSlug" element={<ListDashboard />} />
                                     </Route>
                                     <Route path="books/new" element={<BookForm />} />
-                                    {/* <Route path="collections/new" element={<CollectionForm />} /> */}
+                                    {/* <Route path="lists/new" element={<ListForm />} /> */}
                                     {/* <Route path="settings" element={<Settings />} /> */}
                                 </Route>
                             </Route>

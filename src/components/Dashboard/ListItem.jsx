@@ -2,11 +2,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { EllipsisVerticalIcon } from '@heroicons/react/20/solid';
 
-function CollectionItem(props) {
+function ListItem(props) {
     const { title, slug } = props;
     return (
         <Link
-            to={`/collections/${slug}`}
+            to={`/lists/${slug}`}
             className="relative flex flex-col justify-between cursor-pointer bg-white rounded shadow p-3 pr-5 m-2"
         >
             <div className="mb-1">
@@ -21,10 +21,10 @@ function CollectionItem(props) {
     );
 }
 
-CollectionItem.propTypes = {
+ListItem.propTypes = {
     title: PropTypes.string,
     slug: PropTypes.string,
     user: PropTypes.string
 };
 
-export default CollectionItem;
+export default ListItem;

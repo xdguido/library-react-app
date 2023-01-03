@@ -4,7 +4,7 @@ import Dropdown from '../components/Dashboard/Dropdown';
 
 const navBar = [
     { id: 1, name: 'Books', href: '/', disabled: false },
-    { id: 2, name: 'Collections', href: '/collections', disabled: false },
+    { id: 2, name: 'Lists', href: '/lists', disabled: false },
     { id: 3, name: 'Achievements', href: '/asd', disabled: true },
     { id: 4, name: 'Follows', href: '/asd', disabled: true }
 ];

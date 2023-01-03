@@ -1,11 +1,11 @@
-import { useGetCollectionsQuery } from '../../api/booksApi';
+import { useGetListsQuery } from '../../api/booksApi';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import CollectionItem from './BookItem';
+import ListItem from './BookItem';
 
-function CollectionList() {
+function ListList() {
     const { user } = useSelector((state) => state.auth);
-    const { data, isLoading, isError } = useGetCollectionsQuery(user.username);
+    const { data, isLoading, isError } = useGetListsQuery(user.username);
 
     if (isLoading) {
         return <span>Loading...</span>;
@@ -27,25 +27,25 @@ function CollectionList() {
                             to="/collections/new"
                             className="p-2 rounded-md bg-blue-600 text-white"
                         >
-                            Create a Collection
+                            Create a List
                         </Link>
                     </div>
                 </div>
             ) : (
                 <>
                     <div className="flex items-center mb-4">
-                        <h1 className="font-semibold pl-1">Collections</h1>
+                        <h1 className="font-semibold pl-1">Lists</h1>
                         <Link
                             to="/collections/new"
                             className="py-1 px-2 ml-4 rounded-md bg-blue-600 text-white"
                         >
-                            + Add Collection
+                            + Add List
                         </Link>
                     </div>
                     {/* <div className="grid gap-2 grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"> */}
                     <div className="">
                         {data.map((collection) => (
-                            <CollectionItem key={collection._id} {...collection} />
+                            <ListItem key={collection._id} {...collection} />
                         ))}
                     </div>
                 </>
@@ -54,4 +54,4 @@ function CollectionList() {
     );
 }
 
-export default CollectionList;
+export default ListList;

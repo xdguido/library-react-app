@@ -1,16 +1,16 @@
-import { useGetCollectionByIdQuery } from '../../api/booksApi';
+import { useGetListByIdQuery } from '../../api/booksApi';
 import { useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import BookItem from './BookItem';
 
-function CollectionDashboard() {
+function ListDashboard() {
     const { collectionSlug } = useParams();
     const { user } = useSelector((state) => state.auth);
     const {
         data: collection,
         isLoading,
         isError
-    } = useGetCollectionByIdQuery({
+    } = useGetListByIdQuery({
         userName: user.username,
         collectionSlug
     });
@@ -51,4 +51,4 @@ function CollectionDashboard() {
     );
 }
 
-export default CollectionDashboard;
+export default ListDashboard;

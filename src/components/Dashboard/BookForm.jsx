@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAddBookMutation } from '../../api/booksApi';
-import CollectionCombobox from './CollectionCombobox';
+import ListCombobox from './ListCombobox';
 import GenreCombobox from './GenreCombobox';
 
 function BookForm() {
@@ -23,12 +23,12 @@ function BookForm() {
 
     const [createBook, { isLoading }] = useAddBookMutation();
     const [multiple, setMultiple] = useState(false);
-    const [selectedCollection, setSelectedCollection] = useState('');
+    const [selectedList, setSelectedList] = useState('');
     const [selectedGenre, setSelectedGenre] = useState('');
 
     const onSubmit = (data) => {
         createBook({
-            data: { ...data, genre: selectedGenre, bookCollection: selectedCollection._id }
+            data: { ...data, genre: selectedGenre, bookList: selectedList._id }
         });
         if (!multiple) {
             navigate('/');
@@ -111,9 +111,9 @@ function BookForm() {
                     )}
                 </div>
 
-                <CollectionCombobox
-                    selectedCollection={selectedCollection}
-                    setSelectedCollection={(collection) => setSelectedCollection(collection)}
+                <ListCombobox
+                    selectedList={selectedList}
+                    setSelectedList={(collection) => setSelectedList(collection)}
                 />
 
                 <label className="mb-3 text-sm" htmlFor="multiple">

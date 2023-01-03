@@ -5,7 +5,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 
 const navBar = [
     { id: 1, name: 'Books', href: '/', disabled: false },
-    { id: 2, name: 'Collections', href: '/collections', disabled: false },
+    { id: 2, name: 'Lists', href: '/lists', disabled: false },
     { id: 3, name: 'Achievements', href: '/achievements', disabled: true },
     { id: 4, name: 'Follows', href: '/follows', disabled: true }
 ];

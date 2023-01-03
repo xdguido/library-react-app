@@ -5,7 +5,7 @@ import { baseQueryWithReauth } from './baseQueryWithReauth';
 export const booksApi = createApi({
     reducerPath: 'booksApi',
     baseQuery: baseQueryWithReauth,
-    tagTypes: ['Books', 'Collections'],
+    tagTypes: ['Books', 'Lists'],
     endpoints: (builder) => ({
         getBooks: builder.query({
             query: (userName) => `/books/${userName}`,
@@ -15,13 +15,13 @@ export const booksApi = createApi({
             query: ({ userName, bookSlug }) => `/books/${userName}/${bookSlug}`,
             providesTags: [{ type: 'Books', id: 'Item' }]
         }),
-        getCollections: builder.query({
-            query: (userName) => `/collections/${userName}`,
-            providesTags: [{ type: 'Collections', id: 'List' }]
+        getLists: builder.query({
+            query: (userName) => `/lists/${userName}`,
+            providesTags: [{ type: 'Lists', id: 'List' }]
         }),
-        getCollectionById: builder.query({
-            query: ({ userName, collectionSlug }) => `/collections/${userName}/${collectionSlug}`,
-            providesTags: [{ type: 'Collections', id: 'Item' }]
+        getListById: builder.query({
+            query: ({ userName, listSlug }) => `/lists/${userName}/${listSlug}`,
+            providesTags: [{ type: 'Lists', id: 'Item' }]
         }),
         addBook: builder.mutation({
             query: (newBook) => ({
@@ -55,15 +55,15 @@ export const booksApi = createApi({
                 }
             }
         }),
-        addCollection: builder.mutation({
+        addList: builder.mutation({
             query: (newList) => ({
-                url: '/collections/addBook',
+                url: '/lists/addBook',
                 method: 'post',
                 body: newList
             }),
             async onQueryStarted(newList, { dispatch, queryFulfilled }) {
                 const addResult = dispatch(
-                    booksApi.util.updateQueryData('getCollections', newList.data.user, (draft) => {
+                    booksApi.util.updateQueryData('getLists', newList.data.user, (draft) => {
                         draft.push(newList.data);
                     })
                 );
@@ -79,7 +79,7 @@ export const booksApi = createApi({
                         position: 'bottom-center'
                     });
                     addResult.undo();
-                    dispatch(booksApi.util.invalidateTags({ type: 'Collections', id: 'List' }));
+                    dispatch(booksApi.util.invalidateTags({ type: 'Lists', id: 'List' }));
                 }
             }
         }),
@@ -163,10 +163,10 @@ export const booksApi = createApi({
 export const {
     useGetBooksQuery,
     useGetBookByIdQuery,
-    useGetCollectionsQuery,
-    useGetCollectionByIdQuery,
+    useGetListsQuery,
+    useGetListByIdQuery,
     useAddBookMutation,
-    useAddCollectionMutation,
+    useAddListMutation,
     useToggleLikeMutation,
     useToggleSaveMutation
 } = booksApi;
