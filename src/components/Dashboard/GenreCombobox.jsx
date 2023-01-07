@@ -51,8 +51,8 @@ const GenreCombobox = ({ selectedGenre, setSelectedGenre }) => {
               });
 
     return (
-        <Combobox value={selectedGenre} onChange={setSelectedGenre}>
-            <div className="relative z-10 mb-3">
+        <Combobox value={selectedGenre === 'None' ? '' : selectedGenre} onChange={setSelectedGenre}>
+            <div className="relative z-20 mb-3">
                 <div className="relative w-full cursor-default text-left sm:text-sm">
                     <label className="sr-only" htmlFor="genre">
                         Select book genre

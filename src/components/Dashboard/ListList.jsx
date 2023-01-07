@@ -1,7 +1,7 @@
 import { useGetListsQuery } from '../../api/booksApi';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import ListItem from './BookItem';
+import ListItem from './ListItem';
 
 function ListList() {
     const { user } = useSelector((state) => state.auth);
@@ -23,10 +23,7 @@ function ListList() {
                             Add Book
                         </Link>
                         <span className="text-gray-800 px-2">or</span>
-                        <Link
-                            to="/collections/new"
-                            className="p-2 rounded-md bg-blue-600 text-white"
-                        >
+                        <Link to="/lists/new" className="p-2 rounded-md bg-blue-600 text-white">
                             Create a List
                         </Link>
                     </div>
@@ -34,9 +31,9 @@ function ListList() {
             ) : (
                 <>
                     <div className="flex items-center mb-4">
-                        <h1 className="font-semibold pl-1">Lists</h1>
+                        <h1 className="flex-1 font-semibold pl-1">Lists</h1>
                         <Link
-                            to="/collections/new"
+                            to="/lists/new"
                             className="py-1 px-2 ml-4 rounded-md bg-blue-600 text-white"
                         >
                             + Add List
@@ -44,8 +41,8 @@ function ListList() {
                     </div>
                     {/* <div className="grid gap-2 grid-flow-row grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"> */}
                     <div className="">
-                        {data.map((collection) => (
-                            <ListItem key={collection._id} {...collection} />
+                        {data.map((list) => (
+                            <ListItem key={list._id} {...list} />
                         ))}
                     </div>
                 </>

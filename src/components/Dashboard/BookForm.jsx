@@ -1,32 +1,65 @@
 import { useForm } from 'react-hook-form';
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useAddBookMutation } from '../../api/booksApi';
+import { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { useNavigate, useParams } from 'react-router-dom';
+import {
+    useAddBookMutation,
+    useEditBookMutation,
+    useGetBookByIdDashboardQuery
+} from '../../api/booksApi';
 import ListCombobox from './ListCombobox';
 import GenreCombobox from './GenreCombobox';
 
-function BookForm() {
+function BookForm({ edit }) {
+    const { bookSlug } = useParams();
+
     const {
         register,
         handleSubmit,
+        reset,
         formState: { errors }
     } = useForm({
         mode: 'onSubmit',
         defaultValues: {
             title: '',
             author: '',
+            review: '',
             slug: `test-slug-${Math.round(Math.random() * 10000)}`
         }
     });
-    const navigate = useNavigate();
-    // const location = useLocation();
 
-    const [createBook, { isLoading }] = useAddBookMutation();
+    const {
+        data: book,
+        isLoading,
+        isError
+    } = useGetBookByIdDashboardQuery(bookSlug, { skip: !edit });
+
+    useEffect(() => {
+        if (book) {
+            const { title, author, review, slug, genre, bookList } = book;
+            reset({
+                title,
+                author,
+                review,
+                slug
+            });
+            setSelectedGenre(genre);
+            setSelectedList(bookList);
+        }
+    }, [book]);
+
+    const navigate = useNavigate();
+    const [createBook] = useAddBookMutation();
+    const [editBook] = useEditBookMutation();
     const [multiple, setMultiple] = useState(false);
-    const [selectedList, setSelectedList] = useState('');
-    const [selectedGenre, setSelectedGenre] = useState('');
+    const [selectedList, setSelectedList] = useState({});
+    const [selectedGenre, setSelectedGenre] = useState('None');
 
     const onSubmit = (data) => {
+        if (edit) {
+            editBook({ data: { ...data, genre: selectedGenre, bookList: selectedList._id } });
+            return navigate('/');
+        }
         createBook({
             data: { ...data, genre: selectedGenre, bookList: selectedList._id }
         });
@@ -40,6 +73,13 @@ function BookForm() {
     const classNames = (...classes) => {
         return classes.filter(Boolean).join(' ');
     };
+
+    if (isLoading) {
+        return <span>Loading...</span>;
+    }
+    if (isError) {
+        return <span>Error</span>;
+    }
 
     return (
         <div className="flex justify-center p-4">
@@ -82,8 +122,6 @@ function BookForm() {
                         type="text"
                         placeholder="New book author here..."
                     />
-
-                    {/* <span className="text-gray-400 text-sm">{'Default: "Unknown author"'}</span> */}
                 </div>
 
                 <GenreCombobox
@@ -116,30 +154,32 @@ function BookForm() {
                     setSelectedList={(collection) => setSelectedList(collection)}
                 />
 
-                <label className="mb-3 text-sm" htmlFor="multiple">
-                    <input
-                        className="mr-2"
-                        id="multiple"
-                        type="checkbox"
-                        checked={multiple}
-                        onChange={onChange}
-                    />
-                    Add multiple books
-                </label>
+                {!edit && (
+                    <label className="mb-3 text-sm" htmlFor="multiple">
+                        <input
+                            className="mr-2"
+                            id="multiple"
+                            type="checkbox"
+                            checked={multiple}
+                            onChange={onChange}
+                        />
+                        Add multiple books
+                    </label>
+                )}
                 <button
-                    className={classNames(
-                        isLoading ? 'bg-blue-400' : 'bg-blue-600 ',
-                        'flex items-center justify-center rounded-sm text-sm text-white px-5 py-2'
-                    )}
-                    disabled={isLoading}
+                    className="bg-blue-600 flex items-center justify-center rounded-sm text-sm text-white px-5 py-2"
                     type="submit"
                     form="bookForm"
                 >
-                    Submit
+                    Save
                 </button>
             </form>
         </div>
     );
 }
+
+BookForm.propTypes = {
+    edit: PropTypes.bool
+};
 
 export default BookForm;

@@ -23,6 +23,12 @@ export const booksApi = createApi({
             query: ({ userName, listSlug }) => `/lists/${userName}/${listSlug}`,
             providesTags: [{ type: 'Lists', id: 'Item' }]
         }),
+
+        getBookByIdDashboard: builder.query({
+            query: (bookSlug) => `/books/editBook/getOne/${bookSlug}`,
+            providesTags: [{ type: 'Books', id: 'Item' }]
+        }),
+
         addBook: builder.mutation({
             query: (newBook) => ({
                 url: '/books/addBook',
@@ -31,13 +37,9 @@ export const booksApi = createApi({
             }),
             async onQueryStarted(newBook, { dispatch, queryFulfilled }) {
                 const addResult = dispatch(
-                    booksApi.util.updateQueryData(
-                        'getBooksDashboard',
-                        newBook.data.user,
-                        (draft) => {
-                            draft.push(newBook.data);
-                        }
-                    )
+                    booksApi.util.updateQueryData('getBooks', newBook.data.user, (draft) => {
+                        draft.push(newBook.data);
+                    })
                 );
                 try {
                     const success = await queryFulfilled;
@@ -129,26 +131,32 @@ export const booksApi = createApi({
         }),
 
         editBook: builder.mutation({
-            query: (book) => ({
-                url: '/books',
+            query: (bookData) => ({
+                url: '/books/editBook',
                 method: 'put',
-                body: book
+                body: bookData
             }),
-            async onQueryStarted(args, { dispatch, queryFulfilled }) {
-                const editResult = dispatch(
-                    booksApi.util.updateQueryData('getBooksDashboard', undefined, (draft) => {
-                        Object.assign(draft, args);
+            async onQueryStarted(bookData, { dispatch, queryFulfilled }) {
+                const addResult = dispatch(
+                    booksApi.util.updateQueryData('getBooks', bookData.data.user, (draft) => {
+                        draft.push(bookData.data);
                     })
                 );
                 try {
-                    await queryFulfilled;
+                    const success = await queryFulfilled;
+                    if (success) {
+                        toast.success('Saved.', {
+                            position: 'bottom-center'
+                        });
+                    }
                 } catch {
                     toast.error('Error while saving');
-                    editResult.undo();
+                    addResult.undo();
                     dispatch(booksApi.util.invalidateTags({ type: 'Books', id: 'List' }));
                 }
             }
         }),
+
         removeBook: builder.mutation({
             query: (book) => ({
                 url: '/books',
@@ -167,6 +175,9 @@ export const {
     useGetListByIdQuery,
     useAddBookMutation,
     useAddListMutation,
+    useEditBookMutation,
     useToggleLikeMutation,
-    useToggleSaveMutation
+    useToggleSaveMutation,
+    useGetBookByIdDashboardQuery,
+    useLazyGetBookByIdDashboardQuery
 } = booksApi;

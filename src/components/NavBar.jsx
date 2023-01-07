@@ -100,11 +100,7 @@ function NavBar() {
                                                 <span className="sr-only">Open user menu</span>
                                                 <img
                                                     className="h-8 w-8 rounded-full"
-                                                    src={
-                                                        user.image_url
-                                                            ? user.image_url
-                                                            : profilePicture
-                                                    }
+                                                    src={user.image_url || profilePicture}
                                                     referrerPolicy="no-referrer"
                                                     alt={user.name}
                                                 />

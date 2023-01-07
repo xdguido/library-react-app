@@ -46,7 +46,11 @@ function App() {
                                         <Route path="lists" element={<ListList />} />
                                         <Route path="lists/:listSlug" element={<ListDashboard />} />
                                     </Route>
-                                    <Route path="books/new" element={<BookForm />} />
+                                    <Route path="books/new" element={<BookForm edit={false} />} />
+                                    <Route
+                                        path="books/edit/:bookSlug"
+                                        element={<BookForm edit />}
+                                    />
                                     {/* <Route path="lists/new" element={<ListForm />} /> */}
                                     {/* <Route path="settings" element={<Settings />} /> */}
                                 </Route>
