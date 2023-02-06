@@ -24,9 +24,13 @@ export const booksApi = createApi({
             providesTags: [{ type: 'Lists', id: 'Item' }]
         }),
 
-        getBookByIdDashboard: builder.query({
+        getBookByIdPrivate: builder.query({
             query: (bookSlug) => `/books/editBook/getOne/${bookSlug}`,
             providesTags: [{ type: 'Books', id: 'Item' }]
+        }),
+        getListByIdPrivate: builder.query({
+            query: (listSlug) => `/lists/private/getOne/${listSlug}`,
+            providesTags: [{ type: 'Lists', id: 'Item' }]
         }),
 
         addBook: builder.mutation({
@@ -59,7 +63,7 @@ export const booksApi = createApi({
         }),
         addList: builder.mutation({
             query: (newList) => ({
-                url: '/lists/addBook',
+                url: '/lists/addList',
                 method: 'post',
                 body: newList
             }),
@@ -156,6 +160,32 @@ export const booksApi = createApi({
                 }
             }
         }),
+        editList: builder.mutation({
+            query: (listData) => ({
+                url: '/lists/editList',
+                method: 'put',
+                body: listData
+            }),
+            async onQueryStarted(listData, { dispatch, queryFulfilled }) {
+                const addResult = dispatch(
+                    booksApi.util.updateQueryData('getLists', listData.data.user, (draft) => {
+                        draft.push(listData.data);
+                    })
+                );
+                try {
+                    const success = await queryFulfilled;
+                    if (success) {
+                        toast.success('Saved.', {
+                            position: 'bottom-center'
+                        });
+                    }
+                } catch {
+                    toast.error('Error while saving');
+                    addResult.undo();
+                    dispatch(booksApi.util.invalidateTags({ type: 'Lists', id: 'List' }));
+                }
+            }
+        }),
 
         removeBook: builder.mutation({
             query: (book) => ({
@@ -176,8 +206,9 @@ export const {
     useAddBookMutation,
     useAddListMutation,
     useEditBookMutation,
+    useEditListMutation,
     useToggleLikeMutation,
     useToggleSaveMutation,
-    useGetBookByIdDashboardQuery,
-    useLazyGetBookByIdDashboardQuery
+    useGetBookByIdPrivateQuery,
+    useGetListByIdPrivateQuery
 } = booksApi;

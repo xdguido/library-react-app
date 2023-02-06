@@ -12,6 +12,7 @@ import BooksList from './components/Dashboard/BooksList';
 import ListList from './components/Dashboard/ListList';
 import BookDetails from './components/Main/BookDetails';
 import BookForm from './components/Dashboard/BookForm';
+import ListForm from './components/Dashboard/ListForm';
 
 const Register = lazy(() => import('./pages/Auth/Register'));
 const Recovery = lazy(() => import('./pages/Auth/Recovery'));
@@ -45,13 +46,21 @@ function App() {
                                         <Route index element={<BooksList />} />
                                         <Route path="lists" element={<ListList />} />
                                         <Route path="lists/:listSlug" element={<ListDashboard />} />
+                                        <Route path="books/new" element={<BookForm />} />
+                                        <Route
+                                            path="books/new/:listSlug"
+                                            element={<BookForm fromList />}
+                                        />
+                                        <Route
+                                            path="books/edit/:bookSlug"
+                                            element={<BookForm edit />}
+                                        />
+                                        <Route path="lists/new" element={<ListForm />} />
+                                        <Route
+                                            path="lists/edit/:listSlug"
+                                            element={<ListForm edit />}
+                                        />
                                     </Route>
-                                    <Route path="books/new" element={<BookForm edit={false} />} />
-                                    <Route
-                                        path="books/edit/:bookSlug"
-                                        element={<BookForm edit />}
-                                    />
-                                    {/* <Route path="lists/new" element={<ListForm />} /> */}
                                     {/* <Route path="settings" element={<Settings />} /> */}
                                 </Route>
                             </Route>

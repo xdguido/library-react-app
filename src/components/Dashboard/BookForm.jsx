@@ -5,13 +5,18 @@ import { useNavigate, useParams } from 'react-router-dom';
 import {
     useAddBookMutation,
     useEditBookMutation,
-    useGetBookByIdDashboardQuery
+    useGetBookByIdPrivateQuery,
+    useGetListByIdPrivateQuery
 } from '../../api/booksApi';
 import ListCombobox from './ListCombobox';
 import GenreCombobox from './GenreCombobox';
 
-function BookForm({ edit }) {
+function BookForm({ edit, fromList }) {
+    // use when editing a book.
     const { bookSlug } = useParams();
+
+    // use when adding a book to a list.
+    const { listSlug } = useParams();
 
     const {
         register,
@@ -28,11 +33,9 @@ function BookForm({ edit }) {
         }
     });
 
-    const {
-        data: book,
-        isLoading,
-        isError
-    } = useGetBookByIdDashboardQuery(bookSlug, { skip: !edit });
+    const { data: book } = useGetBookByIdPrivateQuery(bookSlug, { skip: !edit });
+
+    const { data: list } = useGetListByIdPrivateQuery(listSlug, { skip: !fromList });
 
     useEffect(() => {
         if (book) {
@@ -48,11 +51,17 @@ function BookForm({ edit }) {
         }
     }, [book]);
 
+    useEffect(() => {
+        if (list) {
+            setSelectedList(list);
+        }
+    }, [list]);
+
     const navigate = useNavigate();
     const [createBook] = useAddBookMutation();
     const [editBook] = useEditBookMutation();
     const [multiple, setMultiple] = useState(false);
-    const [selectedList, setSelectedList] = useState({});
+    const [selectedList, setSelectedList] = useState(listSlug || {});
     const [selectedGenre, setSelectedGenre] = useState('None');
 
     const onSubmit = (data) => {
@@ -74,12 +83,12 @@ function BookForm({ edit }) {
         return classes.filter(Boolean).join(' ');
     };
 
-    if (isLoading) {
-        return <span>Loading...</span>;
-    }
-    if (isError) {
-        return <span>Error</span>;
-    }
+    // if (isLoading) {
+    //     return <span>Loading...</span>;
+    // }
+    // if (isError) {
+    //     return <span>Error</span>;
+    // }
 
     return (
         <div className="flex justify-center p-4">
@@ -179,7 +188,8 @@ function BookForm({ edit }) {
 }
 
 BookForm.propTypes = {
-    edit: PropTypes.bool
+    edit: PropTypes.bool,
+    fromList: PropTypes.bool
 };
 
 export default BookForm;
